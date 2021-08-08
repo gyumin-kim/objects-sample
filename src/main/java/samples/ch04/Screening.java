@@ -7,27 +7,26 @@ public class Screening {
     private int sequence;
     private LocalDateTime whenScreened;
 
-    public Movie getMovie() {
-        return movie;
-    }
-
-    public void setMovie(final Movie movie) {
+    public Screening(final Movie movie, final int sequence, final LocalDateTime whenScreened) {
         this.movie = movie;
-    }
-
-    public LocalDateTime getWhenScreened() {
-        return whenScreened;
-    }
-
-    public void setWhenScreened(final LocalDateTime whenScreened) {
+        this.sequence = sequence;
         this.whenScreened = whenScreened;
     }
 
-    public int getSequence() {
-        return sequence;
-    }
-
-    public void setSequence(final int sequence) {
-        this.sequence = sequence;
+    public Money calculateFee(final int audienceCount) {
+        switch (movie.getMovieType()) {
+            case AMOUNT_DISCOUNT:
+                if (movie.isDiscountable(whenScreened, sequence)) {
+                    return movie.calculateAmountDiscountFee().times(audienceCount);
+                }
+                break;
+            case PERCENT_DISCOUNT:
+                if (movie.isDiscountable(whenScreened, sequence)) {
+                    return movie.calculatePercentDiscountFee().times(audienceCount);
+                }
+            case NONE_DISCOUNT:
+                return movie.calculateNoneDiscountFee().times(audienceCount);
+        }
+        return movie.calculateNoneDiscountFee().times(audienceCount);
     }
 }
