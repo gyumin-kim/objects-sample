@@ -19,13 +19,12 @@ public class Event {
             || !from.toLocalTime()
                     .equals(schedule.getFrom())
             || !duration.equals(schedule.getDuration())) {
-            reschedule(schedule);
             return false;
         }
         return true;
     }
 
-    private void reschedule(final RecurringSchedule schedule) {
+    public void reschedule(final RecurringSchedule schedule) {
         from = LocalDateTime.of(from.toLocalDate()
                                     .plusDays(daysDistance(schedule)),
                                 schedule.getFrom());
